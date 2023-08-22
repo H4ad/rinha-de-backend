@@ -1,0 +1,20 @@
+{
+  "Count": 1500,
+  "Concurrency": 20,
+  "Quiet": false,
+  "Compress": true,
+  "UserAgent": "pewpewpewpewpew",
+  "Timeout": "1.75s",
+  "DNSPrefetch": true,
+  "Headers": "Accept-Encoding:gzip",
+  "Targets": [
+    {
+      "URL": "http://localhost:9999/pessoas",
+      "Method": "POST",
+      "Body": "{\"nome\": \"Joga10\",\"apelido\": \"[a-zA-Z]{6,8}\",\"nascimento\": \"2000-07-11\",\"stack\": \\[\"Typescript\", \"C#\"\\]}",
+      "Headers": "Accept-Encoding:gzip, Content-Type:application/json",
+      "Timeout": "500ms",
+      "RegexBody": true
+    }
+  ]
+}

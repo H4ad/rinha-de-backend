@@ -1,0 +1,13 @@
+hooks = false
+
+[psql]
+dbname = "dev"
+user = "rinha"
+pass = "password"
+host = "localhost"
+sslmode = "disable"
+
+[aliases.tables.people.columns]
+name = "Name"
+alias = "nome"
+domain_name = "nome"

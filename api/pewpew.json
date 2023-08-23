@@ -1,20 +1,24 @@
 {
-  "Count": 1500,
-  "Concurrency": 20,
+  "Count": 15000,
+  "Concurrency": 300,
   "Quiet": false,
-  "Compress": true,
-  "UserAgent": "pewpewpewpewpew",
+  "Compress": false,
   "Timeout": "1.75s",
   "DNSPrefetch": true,
-  "Headers": "Accept-Encoding:gzip",
   "Targets": [
     {
       "URL": "http://localhost:9999/pessoas",
       "Method": "POST",
-      "Body": "{\"nome\": \"Joga10\",\"apelido\": \"[a-zA-Z]{6,8}\",\"nascimento\": \"2000-07-11\",\"stack\": \\[\"Typescript\", \"C#\"\\]}",
+      "Body": "{\"nome\": \"Joga10\",\"apelido\": \"[a-zA-Z0-9]{10,16}\",\"nascimento\": \"2000-07-11\",\"stack\": \\[\"Typescript\", \"C#\"\\]}",
       "Headers": "Accept-Encoding:gzip, Content-Type:application/json",
-      "Timeout": "500ms",
+      "Timeout": "10s",
       "RegexBody": true
+    },
+    {
+      "URL": "http://localhost:9999/pessoas?t=[a-z]{1,4}",
+      "Method": "GET",
+      "Timeout": "10s",
+      "RegexUrl": true
     }
   ]
 }

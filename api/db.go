@@ -18,10 +18,12 @@ func GetDatabase() *sql.DB {
 		panic("failed to connect database")
 	}
 
+tryagain:
 	err = db.Ping()
 
 	if err != nil {
-		panic("failed to ping database: " + err.Error())
+		time.Sleep(2 * time.Second)
+		goto tryagain
 	}
 
 	db.SetMaxIdleConns(10)

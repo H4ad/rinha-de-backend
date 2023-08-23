@@ -9,7 +9,6 @@ import (
 	"github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
-	"github.com/gofiber/fiber/v2/middleware/pprof"
 	"github.com/joho/godotenv"
 	"github.com/meilisearch/meilisearch-go"
 	"github.com/volatiletech/sqlboiler/v4/boil"
@@ -26,7 +25,6 @@ func main() {
 		JSONEncoder: json.Marshal,
 		JSONDecoder: json.Unmarshal,
 	})
-	app.Use(pprof.New())
 
 	db := GetDatabase()
 	meilisearchRef := GetMeilisearch()
@@ -63,11 +61,11 @@ func main() {
 			return c.Status(422).JSON(fiber.Map{"message": "Error during the creation of the user: " + err.Error()})
 		}
 
-		// _, errMeili := peopleIndex.AddDocuments(person)
-		//
-		// if errMeili != nil {
-		// 	return c.Status(500).JSON(fiber.Map{"message": "Error during the creation of the user in the search engine: " + errMeili.Error()})
-		// }
+		_, errMeili := peopleIndex.AddDocuments(person)
+
+		if errMeili != nil {
+			return c.Status(500).JSON(fiber.Map{"message": "Error during the creation of the user in the search engine: " + errMeili.Error()})
+		}
 
 		c.Location("/pessoas/" + person.ID)
 

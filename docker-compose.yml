@@ -3,11 +3,15 @@ version: '3'
 services:
   api1:
     image: rinha-de-backend:latest
-    restart: unless-stopped
     hostname: api1
     depends_on:
       - db
       - meilisearch
+    healthcheck:
+      test: ['CMD-SHELL', 'curl http://localhost:3000/contagem-pessoas']
+      interval: 5s
+      timeout: 5s
+      retries: 5
     environment:
       DATABASE_URL: postgres://rinha:password@db:5432/dev?sslmode=disable
       MEILISEARCH_HOST: http://meilisearch:7700
@@ -16,16 +20,20 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.35'
+          cpus: '0.3'
           memory: '125MB'
 
   api2:
     image: rinha-de-backend:latest
-    restart: unless-stopped
     hostname: api2
     depends_on:
       - db
       - meilisearch
+    healthcheck:
+      test: ['CMD-SHELL', 'curl http://localhost:3000/contagem-pessoas']
+      interval: 5s
+      timeout: 5s
+      retries: 5
     environment:
       DATABASE_URL: postgres://rinha:password@db:5432/dev?sslmode=disable
       MEILISEARCH_HOST: http://meilisearch:7700
@@ -34,12 +42,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.35'
+          cpus: '0.3'
           memory: '125MB'
 
   db:
     image: postgres:15.4
-    restart: unless-stopped
     ports:
       - '5432:5432'
     environment:
@@ -47,7 +54,7 @@ services:
       POSTGRES_USER: rinha
       POSTGRES_DB: dev
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      test: ['CMD-SHELL', 'pg_isready -U dev']
       interval: 5s
       timeout: 5s
       retries: 5
@@ -61,7 +68,7 @@ services:
       resources:
         limits:
           cpus: '0.5'
-          memory: '2GB'
+          memory: '1.5GB'
 
   meilisearch:
     image: getmeili/meilisearch:v1.3
@@ -77,12 +84,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.3'
-          memory: '650MB'
+          cpus: '0.4'
+          memory: '1GB'
 
   nginx:
     image: nginx:1.24-alpine
-    restart: unless-stopped
     volumes:
       - ./default.conf:/etc/nginx/nginx.conf:ro
     depends_on:
@@ -96,7 +102,7 @@ services:
       resources:
         limits:
           cpus: '0.1'
-          memory: '100MB'
+          memory: '250MB'
 
 volumes:
   meili_data:

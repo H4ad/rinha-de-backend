@@ -9,4 +9,4 @@ CREATE TABLE pessoa (
 	CONSTRAINT pessoa_pkey PRIMARY KEY (id)
 );
 
-CREATE UNIQUE INDEX idx_pessoa_apelido ON public.pessoa USING hash (apelido);
+CREATE UNIQUE INDEX idx_pessoa_apelido ON public.pessoa USING btree (apelido);

@@ -2,15 +2,16 @@ package main
 
 import (
 	"context"
+	"os"
 	"strconv"
 
 	"api/models"
 	"github.com/go-playground/validator/v10"
 	"github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/log"
 	"github.com/google/uuid"
 	"github.com/joho/godotenv"
+	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 func main() {
@@ -68,10 +69,10 @@ func main() {
 			Stack:      payload.Stack,
 		}
 
-		_, errMeili := peopleIndex.AddDocuments(person)
+		err = person.Insert(context.Background(), db, boil.Infer())
 
-		if errMeili != nil {
-			return c.Status(500).JSON(fiber.Map{"message": "Error during the creation of the user in the search engine: " + errMeili.Error()})
+		if err != nil {
+			return c.Status(500).JSON(fiber.Map{"message": "Error during the creation of the user in the search engine: " + err.Error()})
 		}
 
 		c.Location("/pessoas/" + person.ID)
@@ -119,9 +120,11 @@ func main() {
 		return c.Status(200).SendString(strconv.FormatInt(count, 10))
 	})
 
-	err := app.Listen(":3000")
+	port, ok := os.LookupEnv("PORT")
 
-	if err != nil {
-		log.Fatal("Error during the startup of the server: " + err.Error())
+	if ok {
+		app.Listen(":" + port)
+	} else {
+		app.Listen(":3000")
 	}
 }

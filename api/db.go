@@ -24,7 +24,8 @@ func GetDatabase() *sql.DB {
 		panic("failed to ping database: " + err.Error())
 	}
 
-	db.SetMaxIdleConns(10)
+	db.SetMaxOpenConns(50)
+	db.SetMaxIdleConns(2)
 	db.SetConnMaxIdleTime(time.Hour)
 
 	return db
